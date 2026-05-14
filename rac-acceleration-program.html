@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAC Acceleration Program</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f5f6f8;
+      color: #1a1a2e;
+      line-height: 1.6;
+    }
+
+    /* ── Login ── */
+    .login-page {
+      min-height: 100vh;
+      background: #1a1a2e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    .login-eyebrow {
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #c8a84b;
+      margin-bottom: 8px;
+    }
+
+    .login-box h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 6px;
+    }
+
+    .login-box .login-sub {
+      font-size: 0.9rem;
+      color: #718096;
+      margin-bottom: 32px;
+    }
+
+    .login-field {
+      text-align: left;
+      margin-bottom: 18px;
+    }
+
+    .login-field label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 6px;
+    }
+
+    .login-field input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      color: #1a1a2e;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .login-field input:focus {
+      border-color: #c8a84b;
+    }
+
+    .login-error {
+      background: #fff5f5;
+      border: 1px solid #feb2b2;
+      color: #c53030;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 11px;
+      background: #1a1a2e;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-top: 4px;
+    }
+
+    .login-btn:hover {
+      background: #2d2d4e;
+    }
+
+    .login-btn:active {
+      background: #c8a84b;
+    }
+
+    header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 48px 32px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #c8a84b;
+      margin-bottom: 12px;
+    }
+
+    header h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      color: #b0b8cc;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 48px auto;
+      padding: 0 24px;
+    }
+
+    .intro {
+      background: #fff;
+      border-left: 5px solid #c8a84b;
+      border-radius: 4px;
+      padding: 28px 32px;
+      margin-bottom: 40px;
+      font-size: 1.05rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 20px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-bottom: 48px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 28px 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border-top: 4px solid #c8a84b;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      cursor: default;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+
+    .card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #1a1a2e;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: #4a5568;
+    }
+
+    .pillars {
+      background: #fff;
+      border-radius: 8px;
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 48px;
+    }
+
+    .pillars ol {
+      padding-left: 20px;
+    }
+
+    .pillars li {
+      margin-bottom: 14px;
+      font-size: 0.98rem;
+      color: #2d3748;
+    }
+
+    .pillars li strong {
+      color: #1a1a2e;
+    }
+
+    footer {
+      text-align: center;
+      padding: 28px;
+      font-size: 0.85rem;
+      color: #8a93a6;
+      border-top: 1px solid #e2e8f0;
+      background: #fff;
+    }
+
+    /* ── Calculator ── */
+    .calculator {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 48px;
+      overflow: hidden;
+    }
+
+    .calc-header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 20px 32px;
+    }
+
+    .calc-header h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .calc-header p {
+      font-size: 0.9rem;
+      color: #b0b8cc;
+    }
+
+    .calc-body {
+      padding: 32px;
+    }
+
+    .calc-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 640px) {
+      .calc-columns { grid-template-columns: 1fr; }
+    }
+
+    .calc-group-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #c8a84b;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 6px;
+    }
+
+    .field .hint {
+      font-size: 0.78rem;
+      color: #8a93a6;
+      font-weight: 400;
+      margin-left: 4px;
+    }
+
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrap .prefix,
+    .input-wrap .suffix {
+      position: absolute;
+      font-size: 0.9rem;
+      color: #718096;
+      pointer-events: none;
+    }
+
+    .input-wrap .prefix { left: 10px; }
+    .input-wrap .suffix { right: 10px; }
+
+    .input-wrap input {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      color: #1a1a2e;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .input-wrap input:focus {
+      border-color: #c8a84b;
+    }
+
+    .input-wrap.has-prefix input  { padding-left: 24px; }
+    .input-wrap.has-suffix input  { padding-right: 28px; }
+
+    .calc-results {
+      background: #1a1a2e;
+      border-radius: 8px;
+      padding: 28px 32px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+
+    .result-item {
+      text-align: center;
+    }
+
+    .result-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #b0b8cc;
+      margin-bottom: 6px;
+    }
+
+    .result-value {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .result-value.highlight {
+      color: #c8a84b;
+    }
+
+    .result-sub {
+      font-size: 0.82rem;
+      color: #8a93a6;
+      margin-top: 2px;
+    }
+
+    .result-divider {
+      width: 1px;
+      background: rgba(255,255,255,0.1);
+      align-self: stretch;
+    }
+
+    .disclaimer {
+      font-size: 0.78rem;
+      color: #8a93a6;
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    /* ── Icons ── */
+    .login-shield {
+      font-size: 2.4rem;
+      color: #c8a84b;
+      margin-bottom: 16px;
+    }
+
+    .login-field .field-icon-wrap {
+      position: relative;
+    }
+
+    .login-field .field-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #a0aec0;
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    .login-field .field-icon-wrap input {
+      padding-left: 34px;
+    }
+
+    .login-error i {
+      margin-right: 6px;
+    }
+
+    .login-btn i {
+      margin-right: 8px;
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: #f0e9d6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      font-size: 1.1rem;
+      color: #c8a84b;
+    }
+
+    .pillar-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .pillar-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: #1a1a2e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: #c8a84b;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .pillar-text { flex: 1; }
+
+    .calc-header-inner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .calc-header-icon {
+      font-size: 1.6rem;
+      color: #c8a84b;
+      flex-shrink: 0;
+    }
+
+    .result-icon {
+      font-size: 1.1rem;
+      color: #c8a84b;
+      margin-bottom: 6px;
+    }
+
+    .header-icon {
+      font-size: 2rem;
+      color: #c8a84b;
+      margin-bottom: 12px;
+    }
+
+    /* ── API Reference ── */
+    .api-ref {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 48px;
+      overflow: hidden;
+    }
+
+    .api-ref-header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .api-ref-header i {
+      font-size: 1.5rem;
+      color: #c8a84b;
+      flex-shrink: 0;
+    }
+
+    .api-ref-header h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .api-ref-header p {
+      font-size: 0.88rem;
+      color: #b0b8cc;
+    }
+
+    .api-ref-body {
+      padding: 32px;
+    }
+
+    .api-intro {
+      font-size: 0.97rem;
+      color: #4a5568;
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+
+    .api-intro a {
+      color: #c8a84b;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .api-intro a:hover { text-decoration: underline; }
+
+    .key-points {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .key-point {
+      background: #f9f7f2;
+      border-left: 3px solid #c8a84b;
+      border-radius: 4px;
+      padding: 12px 16px;
+      font-size: 0.88rem;
+      color: #2d3748;
+    }
+
+    .key-point strong {
+      display: block;
+      color: #1a1a2e;
+      margin-bottom: 2px;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .code-tabs {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .tab-bar {
+      display: flex;
+      background: #f5f6f8;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #718096;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .tab-btn:hover { color: #1a1a2e; }
+
+    .tab-btn.active {
+      color: #1a1a2e;
+      border-bottom-color: #c8a84b;
+      background: #fff;
+    }
+
+    .code-block {
+      background: #1a1a2e;
+      padding: 24px 28px;
+      margin: 0;
+      overflow-x: auto;
+      position: relative;
+    }
+
+    .code-block code {
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.88rem;
+      line-height: 1.75;
+      color: #e2e8f0;
+      white-space: pre;
+    }
+
+    .code-comment { color: #718096; }
+    .code-key     { color: #c8a84b; }
+    .code-string  { color: #68d391; }
+    .code-kw      { color: #76e4f7; }
+    .code-fn      { color: #b794f4; }
+
+    .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #b0b8cc;
+      border-radius: 5px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .copy-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .copy-btn.copied { color: #68d391; border-color: #68d391; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const FOCUS_AREAS = [
+      { title: "Revenue Growth",        icon: "fa-solid fa-chart-line",   description: "Identifying and unlocking new revenue streams through go-to-market strategy, sales effectiveness, and customer expansion." },
+      { title: "Operational Excellence",icon: "fa-solid fa-gears",        description: "Streamlining processes and building scalable infrastructure to reduce costs and improve margins." },
+      { title: "Talent & Leadership",   icon: "fa-solid fa-users",        description: "Strengthening management teams and building the human capital needed to sustain rapid growth." },
+      { title: "Technology & Data",     icon: "fa-solid fa-database",     description: "Leveraging modern tools and data-driven decision making to create competitive advantage." },
+      { title: "M&A & Partnerships",    icon: "fa-solid fa-handshake",    description: "Accelerating growth through strategic acquisitions, integrations, and ecosystem partnerships." },
+      { title: "Customer Success",      icon: "fa-solid fa-star",         description: "Improving retention, satisfaction, and lifetime value through best-in-class customer engagement practices." },
+    ];
+
+    const PILLARS = [
+      { title: "Assessment & Prioritization", icon: "fa-solid fa-magnifying-glass", body: "Deep-dive analysis to identify the highest-impact value creation opportunities within each portfolio company." },
+      { title: "Playbook Deployment",         icon: "fa-solid fa-book-open",        body: "Application of proven RAC frameworks and best practices tailored to each company's stage and sector." },
+      { title: "Embedded Support",            icon: "fa-solid fa-people-group",     body: "Hands-on engagement from the RAC team, working alongside portfolio management to drive execution." },
+      { title: "Performance Tracking",        icon: "fa-solid fa-chart-bar",        body: "Ongoing measurement against defined KPIs to ensure accountability and course-correct quickly." },
+      { title: "Knowledge Sharing",           icon: "fa-solid fa-lightbulb",        body: "Cross-portfolio learning and peer connections to spread winning strategies across the RAC network." },
+    ];
+
+    const VALID_USER = 'JT';
+    const VALID_PASS = 'JT1';
+
+    function LoginScreen({ onLogin }) {
+      const [username, setUsername] = React.useState('');
+      const [password, setPassword] = React.useState('');
+      const [error, setError]       = React.useState('');
+
+      function handleSubmit(e) {
+        e.preventDefault();
+        if (username === VALID_USER && password === VALID_PASS) {
+          onLogin();
+        } else {
+          setError('Invalid username or password. Please try again.');
+          setPassword('');
+        }
+      }
+
+      return (
+        <div className="login-page">
+          <div className="login-box">
+            <div className="login-shield"><i className="fa-solid fa-shield-halved"></i></div>
+            <div className="login-eyebrow">Riverside Acceleration Capital</div>
+            <h2>RAC Acceleration Program</h2>
+            <p className="login-sub">Sign in to access the program dashboard.</p>
+
+            <form onSubmit={handleSubmit}>
+              {error && <div className="login-error"><i className="fa-solid fa-triangle-exclamation"></i>{error}</div>}
+              <div className="login-field">
+                <label htmlFor="username">Username</label>
+                <div className="field-icon-wrap">
+                  <i className="fa-solid fa-user field-icon"></i>
+                  <input
+                    id="username"
+                    type="text"
+                    autoComplete="username"
+                    value={username}
+                    onChange={e => { setUsername(e.target.value); setError(''); }}
+                    autoFocus
+                  />
+                </div>
+              </div>
+              <div className="login-field">
+                <label htmlFor="password">Password</label>
+                <div className="field-icon-wrap">
+                  <i className="fa-solid fa-lock field-icon"></i>
+                  <input
+                    id="password"
+                    type="password"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={e => { setPassword(e.target.value); setError(''); }}
+                  />
+                </div>
+              </div>
+              <button className="login-btn" type="submit">
+                <i className="fa-solid fa-arrow-right-to-bracket"></i>Sign In
+              </button>
+            </form>
+          </div>
+        </div>
+      );
+    }
+
+    function fmt(n) {
+      if (isNaN(n) || !isFinite(n)) return '—';
+      if (Math.abs(n) >= 1e9) return '$' + (n / 1e9).toFixed(1) + 'B';
+      if (Math.abs(n) >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M';
+      if (Math.abs(n) >= 1e3) return '$' + (n / 1e3).toFixed(0) + 'K';
+      return '$' + n.toFixed(0);
+    }
+
+    function NumField({ label, hint, prefix, suffix, value, onChange, min, max, step }) {
+      return (
+        <div className="field">
+          <label>{label}{hint && <span className="hint">{hint}</span>}</label>
+          <div className={`input-wrap${prefix ? ' has-prefix' : ''}${suffix ? ' has-suffix' : ''}`}>
+            {prefix && <span className="prefix">{prefix}</span>}
+            <input
+              type="number"
+              min={min}
+              max={max}
+              step={step || 1}
+              value={value}
+              onChange={e => onChange(e.target.value)}
+            />
+            {suffix && <span className="suffix">{suffix}</span>}
+          </div>
+        </div>
+      );
+    }
+
+    function Calculator() {
+      const [revenue, setRevenue]         = useState(50);
+      const [ebitda, setEbitda]           = useState(8);
+      const [multiple, setMultiple]       = useState(10);
+      const [revGrowth, setRevGrowth]     = useState(15);
+      const [marginLift, setMarginLift]   = useState(3);
+      const [multExp, setMultExp]         = useState(1.5);
+
+      const rev    = parseFloat(revenue)    || 0;
+      const ebt    = parseFloat(ebitda)     || 0;
+      const mult   = parseFloat(multiple)   || 0;
+      const rg     = parseFloat(revGrowth)  || 0;
+      const ml     = parseFloat(marginLift) || 0;
+      const me     = parseFloat(multExp)    || 0;
+
+      const currentMargin   = rev > 0 ? (ebt / rev) * 100 : 0;
+      const currentEV       = ebt * mult;
+
+      const newRevenue      = rev  * (1 + rg / 100);
+      const newMargin       = currentMargin + ml;
+      const newEbitda       = newRevenue * (newMargin / 100);
+      const newEV           = newEbitda * (mult + me);
+      const valueCreated    = newEV - currentEV;
+      const pctIncrease     = currentEV > 0 ? (valueCreated / currentEV) * 100 : 0;
+
+      return (
+        <section className="calculator">
+          <div className="calc-header">
+            <div className="calc-header-inner">
+              <i className="fa-solid fa-calculator calc-header-icon"></i>
+              <div>
+                <h2>Enterprise Value Calculator</h2>
+                <p>Enter your company's financials to see the potential impact of the RAC Acceleration Program.</p>
+              </div>
+            </div>
+          </div>
+          <div className="calc-body">
+            <div className="calc-columns">
+              <div>
+                <div className="calc-group-title">Your Company Today</div>
+                <NumField label="Annual Revenue" hint="($M)" prefix="$" value={revenue} onChange={setRevenue} min={0} step={1} />
+                <NumField label="EBITDA" hint="($M)" prefix="$" value={ebitda} onChange={setEbitda} min={0} step={0.5} />
+                <NumField label="EV / EBITDA Multiple" suffix="x" value={multiple} onChange={setMultiple} min={1} max={50} step={0.5} />
+              </div>
+              <div>
+                <div className="calc-group-title">RAC Program Assumptions</div>
+                <NumField label="Revenue Growth" hint="(% increase)" suffix="%" value={revGrowth} onChange={setRevGrowth} min={0} max={200} step={1} />
+                <NumField label="EBITDA Margin Improvement" hint="(percentage points)" suffix="pp" value={marginLift} onChange={setMarginLift} min={0} max={30} step={0.5} />
+                <NumField label="Multiple Expansion" hint="(turn increase)" suffix="x" value={multExp} onChange={setMultExp} min={0} max={20} step={0.5} />
+              </div>
+            </div>
+
+            <div className="calc-results">
+              <div className="result-item">
+                <div className="result-icon"><i className="fa-solid fa-building"></i></div>
+                <div className="result-label">Current EV</div>
+                <div className="result-value">{fmt(currentEV * 1e6)}</div>
+                <div className="result-sub">{mult.toFixed(1)}x · {currentMargin.toFixed(1)}% margin</div>
+              </div>
+              <div className="result-item">
+                <div className="result-icon"><i className="fa-solid fa-arrow-trend-up"></i></div>
+                <div className="result-label">New Revenue</div>
+                <div className="result-value">{fmt(newRevenue * 1e6)}</div>
+                <div className="result-sub">+{rg.toFixed(0)}% growth</div>
+              </div>
+              <div className="result-item">
+                <div className="result-icon"><i className="fa-solid fa-circle-dollar-to-slot"></i></div>
+                <div className="result-label">New EBITDA</div>
+                <div className="result-value">{fmt(newEbitda * 1e6)}</div>
+                <div className="result-sub">{newMargin.toFixed(1)}% margin</div>
+              </div>
+              <div className="result-item">
+                <div className="result-icon"><i className="fa-solid fa-building-columns"></i></div>
+                <div className="result-label">New EV</div>
+                <div className="result-value">{fmt(newEV * 1e6)}</div>
+                <div className="result-sub">{(mult + me).toFixed(1)}x multiple</div>
+              </div>
+              <div className="result-item">
+                <div className="result-icon"><i className="fa-solid fa-trophy"></i></div>
+                <div className="result-label">Value Created</div>
+                <div className="result-value highlight">{fmt(valueCreated * 1e6)}</div>
+                <div className="result-sub">+{pctIncrease.toFixed(0)}% increase</div>
+              </div>
+            </div>
+
+            <p className="disclaimer">
+              Figures are illustrative estimates based on inputs provided. All values in USD millions unless otherwise noted.
+              This calculator does not constitute financial advice.
+            </p>
+          </div>
+        </section>
+      );
+    }
+
+    const CODE_SAMPLES = {
+      curl: {
+        icon: 'fa-solid fa-terminal',
+        label: 'cURL',
+        text: `curl https://api.stripe.com/v1/payment_intents \\
+  -u sk_live_RAC_SECRET_KEY: \\
+  -H "Idempotency-Key: $(uuidgen)" \\
+  -d amount=500000 \\
+  -d currency=usd \\
+  -d "metadata[program]=RAC_Acceleration" \\
+  -d "metadata[company]=Acme_Corp"`,
+        highlighted: (
+          <code>
+            <span className="code-kw">curl</span> https://api.stripe.com/v1/payment_intents \{'\n'}
+            {'  '}<span className="code-key">-u</span> <span className="code-string">sk_live_RAC_SECRET_KEY:</span> \{'\n'}
+            {'  '}<span className="code-key">-H</span> <span className="code-string">"Idempotency-Key: $(uuidgen)"</span> \{'\n'}
+            {'  '}<span className="code-key">-d</span> amount=<span className="code-string">500000</span> \{'\n'}
+            {'  '}<span className="code-key">-d</span> currency=<span className="code-string">usd</span> \{'\n'}
+            {'  '}<span className="code-key">-d</span> <span className="code-string">"metadata[program]=RAC_Acceleration"</span> \{'\n'}
+            {'  '}<span className="code-key">-d</span> <span className="code-string">"metadata[company]=Acme_Corp"</span>
+          </code>
+        ),
+      },
+      node: {
+        icon: 'fa-brands fa-node-js',
+        label: 'Node.js',
+        text: `import Stripe from 'stripe';
+import { v4 as uuidv4 } from 'uuid';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+// Safe to retry — same key returns the same result
+const paymentIntent = await stripe.paymentIntents.create(
+  {
+    amount: 500000,          // $5,000.00 in cents
+    currency: 'usd',
+    metadata: {
+      program: 'RAC_Acceleration',
+      company: 'Acme Corp',
+    },
+  },
+  {
+    idempotencyKey: uuidv4(), // Unique per enrollment attempt
+  }
+);`,
+        highlighted: (
+          <code>
+            <span className="code-kw">import</span> Stripe <span className="code-kw">from</span> <span className="code-string">'stripe'</span>;{'\n'}
+            <span className="code-kw">import</span> {'{ v4 as uuidv4 }'} <span className="code-kw">from</span> <span className="code-string">'uuid'</span>;{'\n\n'}
+            <span className="code-kw">const</span> stripe = <span className="code-kw">new</span> <span className="code-fn">Stripe</span>(process.env.<span className="code-key">STRIPE_SECRET_KEY</span>);{'\n\n'}
+            <span className="code-comment">{'// Safe to retry — same key returns the same result'}</span>{'\n'}
+            <span className="code-kw">const</span> paymentIntent = <span className="code-kw">await</span> stripe.paymentIntents.<span className="code-fn">create</span>({'\n'}
+            {'  '}{'{'}{'\n'}
+            {'    '}amount: <span className="code-string">500000</span>,{'          '}<span className="code-comment">{'// $5,000.00 in cents'}</span>{'\n'}
+            {'    '}currency: <span className="code-string">'usd'</span>,{'\n'}
+            {'    '}metadata: {'{'}{'\n'}
+            {'      '}program: <span className="code-string">'RAC_Acceleration'</span>,{'\n'}
+            {'      '}company: <span className="code-string">'Acme Corp'</span>,{'\n'}
+            {'    '}{'},'}{'\n'}
+            {'  '}{'}'},{'\n'}
+            {'  '}{'{'}{'\n'}
+            {'    '}idempotencyKey: <span className="code-fn">uuidv4</span>(), <span className="code-comment">{'// Unique per enrollment attempt'}</span>{'\n'}
+            {'  '}{'}'}{'\n'}
+            {')'};
+          </code>
+        ),
+      },
+      python: {
+        icon: 'fa-brands fa-python',
+        label: 'Python',
+        text: `import stripe
+import uuid
+
+stripe.api_key = os.environ["STRIPE_SECRET_KEY"]
+
+# Safe to retry — same key returns the same result
+payment_intent = stripe.PaymentIntent.create(
+    amount=500000,           # $5,000.00 in cents
+    currency="usd",
+    metadata={
+        "program": "RAC_Acceleration",
+        "company": "Acme Corp",
+    },
+    idempotency_key=str(uuid.uuid4()),
+)`,
+        highlighted: (
+          <code>
+            <span className="code-kw">import</span> stripe{'\n'}
+            <span className="code-kw">import</span> uuid{'\n\n'}
+            stripe.api_key = os.environ[<span className="code-string">"STRIPE_SECRET_KEY"</span>]{'\n\n'}
+            <span className="code-comment">{'# Safe to retry — same key returns the same result'}</span>{'\n'}
+            payment_intent = stripe.PaymentIntent.<span className="code-fn">create</span>({'\n'}
+            {'    '}amount=<span className="code-string">500000</span>,           <span className="code-comment">{'# $5,000.00 in cents'}</span>{'\n'}
+            {'    '}currency=<span className="code-string">"usd"</span>,{'\n'}
+            {'    '}metadata={'{'}{'\n'}
+            {'        '}<span className="code-string">"program"</span>: <span className="code-string">"RAC_Acceleration"</span>,{'\n'}
+            {'        '}<span className="code-string">"company"</span>: <span className="code-string">"Acme Corp"</span>,{'\n'}
+            {'    '}{'}'},{'\n'}
+            {'    '}idempotency_key=<span className="code-fn">str</span>(uuid.<span className="code-fn">uuid4</span>()),{'\n'}
+            )
+          </code>
+        ),
+      },
+    };
+
+    function ApiReference() {
+      const [activeTab, setActiveTab] = React.useState('node');
+      const [copied, setCopied]       = React.useState(false);
+
+      function handleCopy() {
+        navigator.clipboard.writeText(CODE_SAMPLES[activeTab].text).then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        });
+      }
+
+      return (
+        <section className="api-ref">
+          <div className="api-ref-header">
+            <i className="fa-brands fa-stripe-s"></i>
+            <div>
+              <h2>Stripe API Integration</h2>
+              <p>How the RAC platform uses idempotent requests to safely process program enrollments.</p>
+            </div>
+          </div>
+          <div className="api-ref-body">
+            <p className="api-intro">
+              The RAC platform integrates with the{' '}
+              <a href="https://docs.stripe.com/api/idempotent_requests" target="_blank" rel="noreferrer">
+                Stripe Idempotent Requests API
+              </a>{' '}
+              to ensure program enrollment charges are processed exactly once — even if a request is retried
+              due to a network error or timeout. Every POST request includes a unique{' '}
+              <strong>Idempotency-Key</strong> (a V4 UUID) so Stripe can safely deduplicate retries and
+              return the original response without double-charging.
+            </p>
+
+            <div className="key-points">
+              <div className="key-point">
+                <strong><i className="fa-solid fa-key"></i> Idempotency Key</strong>
+                A V4 UUID generated per enrollment attempt. Up to 255 characters; never reuse across different operations.
+              </div>
+              <div className="key-point">
+                <strong><i className="fa-solid fa-clock-rotate-left"></i> 24-Hour Window</strong>
+                Stripe caches the result of the first request for 24 hours. Retries within that window return the same response.
+              </div>
+              <div className="key-point">
+                <strong><i className="fa-solid fa-shield-halved"></i> POST Only</strong>
+                Only POST requests need idempotency keys. GET and DELETE are already idempotent by definition.
+              </div>
+              <div className="key-point">
+                <strong><i className="fa-solid fa-circle-check"></i> Parameter Matching</strong>
+                Stripe validates that retried requests use identical parameters — mismatches return a 422 error.
+              </div>
+            </div>
+
+            <div className="code-tabs">
+              <div className="tab-bar">
+                {Object.entries(CODE_SAMPLES).map(([key, { icon, label }]) => (
+                  <button
+                    key={key}
+                    className={`tab-btn${activeTab === key ? ' active' : ''}`}
+                    onClick={() => { setActiveTab(key); setCopied(false); }}
+                  >
+                    <i className={icon}></i>{label}
+                  </button>
+                ))}
+              </div>
+              <pre className="code-block">
+                <button className={`copy-btn${copied ? ' copied' : ''}`} onClick={handleCopy}>
+                  <i className={copied ? 'fa-solid fa-check' : 'fa-regular fa-copy'}></i>
+                  {copied ? 'Copied!' : 'Copy'}
+                </button>
+                {CODE_SAMPLES[activeTab].highlighted}
+              </pre>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function Header() {
+      return (
+        <header>
+          <div className="header-icon"><i className="fa-solid fa-rocket"></i></div>
+          <div className="eyebrow">Riverside Acceleration Capital</div>
+          <h1>RAC Acceleration Program</h1>
+          <p>A focused value creation initiative designed to accelerate growth across our portfolio companies.</p>
+        </header>
+      );
+    }
+
+    function Card({ title, icon, description }) {
+      return (
+        <div className="card">
+          <div className="card-icon"><i className={icon}></i></div>
+          <h3>{title}</h3>
+          <p>{description}</p>
+        </div>
+      );
+    }
+
+    function FocusAreas() {
+      return (
+        <section>
+          <h2 className="section-title">Key Focus Areas</h2>
+          <div className="cards">
+            {FOCUS_AREAS.map((area) => (
+              <Card key={area.title} title={area.title} icon={area.icon} description={area.description} />
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    function Pillars() {
+      return (
+        <section className="pillars">
+          <h2 className="section-title">Program Pillars</h2>
+          <div>
+            {PILLARS.map((pillar) => (
+              <div key={pillar.title} className="pillar-item">
+                <div className="pillar-icon"><i className={pillar.icon}></i></div>
+                <div className="pillar-text"><strong>{pillar.title}</strong> — {pillar.body}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    function Footer() {
+      return (
+        <footer>
+          &copy; {new Date().getFullYear()} Riverside Acceleration Capital. All rights reserved.
+        </footer>
+      );
+    }
+
+    function App() {
+      const [authed, setAuthed] = React.useState(false);
+
+      if (!authed) return <LoginScreen onLogin={() => setAuthed(true)} />;
+
+      return (
+        <>
+          <Header />
+          <main>
+            <div className="intro">
+              The <strong>RAC Acceleration Program</strong> is Riverside Acceleration Capital's structured approach
+              to driving operational improvement, revenue growth, and long-term value across portfolio investments.
+              By pairing strategic resources with hands-on execution support, the program helps companies scale
+              faster and more efficiently.
+            </div>
+            <Calculator />
+            <FocusAreas />
+            <Pillars />
+            <ApiReference />
+          </main>
+          <Footer />
+        </>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
